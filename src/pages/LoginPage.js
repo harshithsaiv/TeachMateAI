@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
+const ADMIN_CREDENTIALS = {
+  email: 'admin@vtu.edu',
+  password: 'admin123',
+};
+
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -26,7 +31,14 @@ const LoginPage = () => {
 
     try {
       setTimeout(() => {
-        localStorage.setItem('user', JSON.stringify({ role: 'faculty', email: formData.email }));
+        let role = 'faculty';
+        if (
+          formData.email === ADMIN_CREDENTIALS.email &&
+          formData.password === ADMIN_CREDENTIALS.password
+        ) {
+          role = 'admin';
+        }
+        localStorage.setItem('user', JSON.stringify({ role, email: formData.email }));
         navigate('/dashboard');
       }, 1000);
     } catch (err) {
